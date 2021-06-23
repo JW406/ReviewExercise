@@ -5,10 +5,12 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import javax.servlet.ServletContext;
 // import javax.servlet.annotation.WebServlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,10 +24,12 @@ public class Home extends HttpServlet {
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    String file = "ShowMe.txt";
+    String file = "/resources/ShowMe.txt";
+    ServletContext context = getServletContext();
+    URL url = context.getResource(file);
     PrintWriter out = response.getWriter();
 
-    try (FileInputStream fis = new FileInputStream(getClass().getClassLoader().getResource(file).getFile());
+    try (FileInputStream fis = new FileInputStream(url.getFile());
         BufferedInputStream bis = new BufferedInputStream(fis)) {
       // log user info to DB;
       logToDB(request.getRemoteHost());
